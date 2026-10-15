@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://soul.gd" id="1_soul"]
+
+[ext_resource type="AudioStream" path="res://sounds/ding.wav" id="2_echo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_soul"]
+radius = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_soul"]
+albedo_color = Color(0.4, 0.8, 1, 1)
+emission_enabled = true
+emission = Color(0.4, 0.8, 1, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_soul"]
+material = SubResource("StandardMaterial3D_soul")
+radius = 0.35
+height = 0.7
+
+[node name="MemoryShard" type="Area3D" groups=["soul"]]
+script = ExtResource("1_soul")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_soul")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("SphereMesh_soul")
+
+[node name="Echo" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_echo")
+volume_db = 3.0
+unit_size = 24.0
+max_distance = 0.0
