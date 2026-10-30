@@ -1,36 +1,40 @@
 extends Area3D
-# 记忆碎片：只存在于潜意识（下层）、黑暗中自己发光的小球。
-# 玩家碰到 → collected（计入得分）；心魔碰到 → eaten（碎片被永久吞噬！）
-# 它还随身带一个"回声"音效：玩家按 Q 聆听时，碎片按距离延迟回一声，
-# 像声呐一样——这就是在漆黑下层找碎片的办法。
+# This is a memory shard. It only exists on the lower floor, in the dark.
+# It glows by itself, spins, and floats up and down.
+# If the player touches it  -> it is collected (+1 score).
+# If the monster touches it -> it is eaten and gone forever.
+# It also has an "echo" sound: when the player presses Q,
+# this shard answers after some seconds (later = farther away).
 
 
-# ================== 手感参数（随便调） ==================
-const SPIN_SPEED := 2.0     # 自转速度（弧度/秒）
-const FLOAT_SPEED := 2.0    # 上下浮动快慢
-const FLOAT_RANGE := 0.3    # 上下浮动幅度（米）
-const HOVER_HEIGHT := 0.9   # 悬浮中心离地高度
+# ================== settings (you can change these) ==================
+const SPIN_SPEED := 2.0     # spin speed
+const FLOAT_SPEED := 2.0    # how fast it floats up and down
+const FLOAT_RANGE := 0.3    # how far it floats up and down (meters)
+const HOVER_HEIGHT := 0.9   # the middle height of the floating
 
-signal collected   # "被玩家捡了"——game.gd 计分
-signal eaten       # "被心魔吞了"——game.gd 缩减总数并让心魔传送
+signal collected   # "the player got me" - game.gd counts the score
+signal eaten       # "the monster ate me" - game.gd makes the total smaller
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 @onready var _echo: AudioStreamPlayer3D = $Echo
 
-var _time := 0.0   # 自己的秒表，驱动浮动
+var _time := 0.0   # my own clock, used for the floating
 
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
-	_time = randf() * TAU   # 随机起点，十颗碎片起伏参差不齐
+	_time = randf() * TAU   # random start time, so all shards float differently
 
 
 func _process(delta: float) -> void:
 	_time += delta
-	rotate_y(SPIN_SPEED * delta)
+	rotate_y(SPIN_SPEED * delta)   # spin around
+	# sin goes from -1 to 1, so the shard moves up and down around its height
 	mesh.position.y = HOVER_HEIGHT + sin(_time * FLOAT_SPEED) * FLOAT_RANGE
 
 
+# something walked into me. Who was it?
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		_collected()
@@ -38,10 +42,10 @@ func _on_body_entered(body: Node3D) -> void:
 		_eaten()
 
 
-# 玩家按 Q 时被调用：delay = 声音从玩家传过来的时间（距离越远越晚响）
+# the player pressed Q: play my echo after "delay" seconds
 func play_echo(delay: float) -> void:
 	await get_tree().create_timer(delay).timeout
-	if is_inside_tree():   # 等待期间碎片可能已经被捡走删掉了
+	if is_inside_tree():   # maybe I was already picked up while waiting
 		_echo.play()
 
 
@@ -52,12 +56,13 @@ func _collected() -> void:
 
 func _eaten() -> void:
 	eaten.emit()
-	_disappear(0.35)   # 被吞掉时消失得慢一点，像在挣扎
+	_disappear(0.35)   # being eaten looks a little slower, like a small fight
 
 
 func _disappear(duration: float) -> void:
-	# 关掉感应防止重复触发；正在物理回调里不许当场改，所以 set_deferred
+	# stop the touch detection, so it cannot happen twice
+	# set_deferred = "do it at the end of this frame" (Godot asks for this here)
 	set_deferred("monitoring", false)
 	var tween := create_tween()
-	tween.tween_property(mesh, "scale", Vector3.ONE * 0.01, duration)
-	tween.tween_callback(queue_free)
+	tween.tween_property(mesh, "scale", Vector3.ONE * 0.01, duration)   # shrink to nothing
+	tween.tween_callback(queue_free)                                     # then delete me
