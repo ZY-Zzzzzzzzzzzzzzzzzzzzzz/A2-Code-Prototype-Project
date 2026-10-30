@@ -34,6 +34,8 @@ Move between the two levels, recover every memory shard hidden in the pitch-blac
 
 # Running the Project
 
+The Windows executable (`Soul.exe`) is available under **Assets** in [Releases, tag `v1-a2-2026-10-30`](https://github.com/ZY-Zzzzzzzzzzzzzzzzzzzzzz/A2-Code-Prototype-Project/releases/tag/v1-a2-2026-10-30): [download Soul.exe](https://github.com/ZY-Zzzzzzzzzzzzzzzzzzzzzz/A2-Code-Prototype-Project/releases/download/v1-a2-2026-10-30/Soul.exe).
+
 1. Install [Godot 4.7](https://godotengine.org/download).
 2. Open the `project.godot` file in this directory using Godot.
 3. Press F5 to run the project.
