@@ -1,4 +1,11 @@
 # A2-Code-Prototype-Project
+
+## ⬇️ [DOWNLOAD SOUL.EXE (WINDOWS)](https://github.com/ZY-Zzzzzzzzzzzzzzzzzzzzzz/A2-Code-Prototype-Project/releases/download/v1-a2-2026-10-30/Soul.exe)
+
+> **EXE LOCATION:** [Releases → `v1-a2-2026-10-30` → Assets](https://github.com/ZY-Zzzzzzzzzzzzzzzzzzzzzz/A2-Code-Prototype-Project/releases/tag/v1-a2-2026-10-30)
+
+---
+
 A 3D first-person stealth puzzle game created in Godot 4.7.
 
 You are trapped inside a two-level maze constructed by your own mind: the upper level represents the **surface mind**, while the lower level represents the **subconscious**.
@@ -33,8 +40,6 @@ Move between the two levels, recover every memory shard hidden in the pitch-blac
 - Audio: No external audio assets. All WAV files were synthesised using Python, including the sonar ping, shard echoes, and looping breathing sound.
 
 # Running the Project
-
-The Windows executable (`Soul.exe`) is available under **Assets** in [Releases, tag `v1-a2-2026-10-30`](https://github.com/ZY-Zzzzzzzzzzzzzzzzzzzzzz/A2-Code-Prototype-Project/releases/tag/v1-a2-2026-10-30): [download Soul.exe](https://github.com/ZY-Zzzzzzzzzzzzzzzzzzzzzz/A2-Code-Prototype-Project/releases/download/v1-a2-2026-10-30/Soul.exe).
 
 1. Install [Godot 4.7](https://godotengine.org/download).
 2. Open the `project.godot` file in this directory using Godot.
